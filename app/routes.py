@@ -1,32 +1,32 @@
-import json
 import os
 from functools import wraps
 
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
 from werkzeug.security import check_password_hash
 
-from .db import get_db
-from .images import save_image
+from .db import delete_photo_file, delete_photo_record, fetch_photos, fetch_rsvps, find_photo, insert_photo, insert_rsvp, next_photo_order, public_photo_url, read_event, save_event, upload_photo_file
+from .images import process_image, save_image_bytes
 
 public = Blueprint("public", __name__)
 admin = Blueprint("admin", __name__)
 
 
 def event_content(published=True):
-    row = get_db().execute("SELECT * FROM event WHERE id = 1").fetchone()
-    key = "published_json" if published else "draft_json"
-    return json.loads(row[key]), bool(row["is_published"])
+    return read_event(published)
 
 
 @public.get("/")
 def home():
     content, is_published = event_content()
-    photos = get_db().execute("SELECT * FROM photo WHERE visible = 1 ORDER BY sort_order, id").fetchall()
+    photos = fetch_photos()
     return render_template("rsvp.html", content=content, photos=photos, is_published=is_published)
 
 
 @public.get("/media/<path:filename>")
 def media(filename):
+    remote_url = public_photo_url(filename)
+    if remote_url:
+        return redirect(remote_url)
     return send_from_directory(current_app.config["UPLOAD_FOLDER"], filename)
 
 
@@ -46,11 +46,7 @@ def rsvp():
         party_size = max(1, min(12, int(party_size)))
     except ValueError:
         party_size = 1
-    get_db().execute(
-        "INSERT INTO rsvp (name, attending, party_size, contact, notes, created_at) VALUES (?, ?, ?, ?, ?, datetime('now'))",
-        (name, attending, party_size, request.form.get("contact", "").strip(), request.form.get("notes", "").strip()),
-    )
-    get_db().commit()
+    insert_rsvp(name, attending, party_size, request.form.get("contact", "").strip(), request.form.get("notes", "").strip())
     flash("Your response has been tucked safely into our guest book.", "success")
     return redirect(url_for("public.home") + "#rsvp")
 
@@ -91,8 +87,8 @@ def logout():
 @login_required
 def dashboard():
     content, is_published = event_content(False)
-    rsvps = get_db().execute("SELECT * FROM rsvp ORDER BY created_at DESC").fetchall()
-    photos = get_db().execute("SELECT * FROM photo ORDER BY sort_order, id").fetchall()
+    rsvps = fetch_rsvps()
+    photos = fetch_photos(False)
     return render_template("admin/dashboard.html", content=content, is_published=is_published, rsvps=rsvps, photos=photos)
 
 
@@ -104,11 +100,7 @@ def event_editor():
         fields = ["celebrant", "title", "intro", "date", "time", "venue", "address", "story", "dress_code", "gifts", "contact", "rsvp_deadline"]
         content.update({field: request.form.get(field, "").strip() for field in fields})
         content.update({field: request.form.get(field) == "on" for field in ["show_party_size", "show_contact", "show_notes"]})
-        db = get_db()
-        db.execute("UPDATE event SET draft_json = ?, updated_at = datetime('now') WHERE id = 1", (json.dumps(content),))
-        if request.form.get("action") == "publish":
-            db.execute("UPDATE event SET published_json = ?, is_published = 1 WHERE id = 1", (json.dumps(content),))
-        db.commit()
+        save_event(content, request.form.get("action") == "publish")
         message = "The invitation is now live." if request.form.get("action") == "publish" else "The invitation draft was saved."
         flash(message, "success")
         return redirect(url_for("admin.dashboard"))
@@ -123,10 +115,12 @@ def upload_photo():
         flash("Choose an image before uploading.", "error")
         return redirect(url_for("admin.dashboard"))
     try:
-        filename = save_image(uploaded, current_app.config["UPLOAD_FOLDER"])
-        next_order = get_db().execute("SELECT COALESCE(MAX(sort_order), -1) + 1 AS next FROM photo").fetchone()["next"]
-        get_db().execute("INSERT INTO photo (filename, caption, sort_order) VALUES (?, ?, ?)", (filename, request.form.get("caption", "").strip(), next_order))
-        get_db().commit()
+        filename, image_bytes = process_image(uploaded)
+        if current_app.config.get("SUPABASE_URL") and current_app.config.get("SUPABASE_SERVICE_ROLE_KEY"):
+            upload_photo_file(filename, image_bytes)
+        else:
+            save_image_bytes(filename, image_bytes, current_app.config["UPLOAD_FOLDER"])
+        insert_photo(filename, request.form.get("caption", "").strip(), next_photo_order())
         flash("Photo added to the gallery.", "success")
     except (ValueError, OSError):
         flash("That image could not be uploaded. Use a valid JPG, PNG, or WEBP file.", "error")
@@ -136,11 +130,8 @@ def upload_photo():
 @admin.post("/photos/<int:photo_id>/delete")
 @login_required
 def delete_photo(photo_id):
-    photo = get_db().execute("SELECT * FROM photo WHERE id = ?", (photo_id,)).fetchone()
+    photo = find_photo(photo_id)
     if photo:
-        path = os.path.join(current_app.config["UPLOAD_FOLDER"], photo["filename"])
-        if os.path.exists(path):
-            os.remove(path)
-        get_db().execute("DELETE FROM photo WHERE id = ?", (photo_id,))
-        get_db().commit()
+        delete_photo_file(photo["filename"])
+        delete_photo_record(photo_id)
     return redirect(url_for("admin.dashboard"))
