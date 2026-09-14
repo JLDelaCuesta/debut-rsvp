@@ -31,6 +31,8 @@ DEFAULT_CONTENT = {
     "court_roses": "Kwin Lyka Esclamado\nSheena Rayne Espiritu\nDaniella Jaile Lacap\nElyssa Fhay Zoilo\nHannah Dela Cueva\nJhorlyn Cornejo\nSarah Garcia\nEricka Quequing\nJayanne Manalang\nFlorentine Principe\nAmiel Subia\nAubprex Subia\nAriel Subia\nRuben Quequing\nRaniedel Arrogancia\nArvhee Latayan\nCarlo Latayan\nJonnelle Molina",
 }
 
+COURT_FIELDS = ("court_gifts", "court_bluebills", "court_roses")
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS event (id INTEGER PRIMARY KEY CHECK (id = 1), draft_json TEXT NOT NULL, published_json TEXT NOT NULL, is_published INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS rsvp (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, attending TEXT NOT NULL, party_size INTEGER NOT NULL DEFAULT 1, contact TEXT, notes TEXT, created_at TEXT NOT NULL);
@@ -91,6 +93,9 @@ def read_event(published=True):
     value = row[key]
     content = json.loads(value) if isinstance(value, str) else value
     content = {**DEFAULT_CONTENT, **content}
+    for field in COURT_FIELDS:
+        if not str(content.get(field, "")).strip():
+            content[field] = DEFAULT_CONTENT[field]
     return content, bool(row["is_published"])
 
 def fetch_photos(visible_only=True):
