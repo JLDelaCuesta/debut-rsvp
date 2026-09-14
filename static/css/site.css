@@ -141,3 +141,17 @@ footer a { color: #e6b8d1; }
 .admin-card h2, .editor-section h2 { color: #4d225b; }
 .status-dot.live { background: #526b67; }
 .quiet-button { border-color: rgba(77,34,91,.24); color: #4d225b; }
+
+/* Canonical control interactions. Keep variants distinct, but make motion consistent. */
+button, .button, .quiet-button, .delete-button, .gallery-trigger, .lightbox-close { -webkit-tap-highlight-color: transparent; }
+button:not(.gallery-trigger), .button, .quiet-button, .delete-button, .lightbox-close { transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease; }
+.button, .quiet-button { position: relative; overflow: hidden; }
+.button::after, .quiet-button::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.24); transform: translateX(-110%); transition: transform .3s ease; pointer-events: none; }
+.button:hover, .button:focus-visible { background: #e0a9ca; color: #241936; transform: translateY(-3px); box-shadow: 0 10px 22px rgba(77,34,91,.28); }
+.button:hover::after, .button:focus-visible::after, .quiet-button:hover::after, .quiet-button:focus-visible::after { transform: translateX(110%); }
+.button:active, .quiet-button:active, .delete-button:active, .lightbox-close:active { transform: translateY(0) scale(.97); }
+.quiet-button:hover, .quiet-button:focus-visible { background: #4d225b; border-color: #4d225b; color: #fcf9ff; transform: translateY(-2px); box-shadow: 0 8px 18px rgba(77,34,91,.2); }
+.delete-button:hover, .delete-button:focus-visible { background: #f1dce9; color: #812e55; transform: translateY(-2px) scale(1.05); }
+.gallery-trigger:focus-visible, .lightbox-close:focus-visible, .choice input:focus-visible + span { outline: 3px solid #d49ac2; outline-offset: 3px; }
+.lightbox-close:hover, .lightbox-close:focus-visible { background: #e0a9ca; border-color: #e0a9ca; color: #241936; transform: rotate(8deg) scale(1.06); box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+.gallery-trigger:hover .zoom-hint { background: #e0a9ca; color: #241936; border-color: #e0a9ca; }
