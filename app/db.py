@@ -26,6 +26,9 @@ DEFAULT_CONTENT = {
     "show_party_size": True,
     "show_contact": True,
     "show_notes": True,
+    "court_gifts": "Amiel Subia\nAubprex Subia\nAriel Subia\nRuben Quequing\nRaniedel Arrogancia\nArvhee Latayan\nCarlo Latayan\nJohn Karl Comendador\nJonnelle Molina\nJarrel Catapang\nYves Mcguire\nJohn Rei Subia\nDustin Manalang\nMark Anthony Subia\nJohn Lester Quequing\nArbench Subia\nZid Andrei Vela\nMJ Molina",
+    "court_bluebills": "Amiel Subia\nAubprex Subia\nAriel Subia\nRuben Quequing\nRaniedel Arrogancia\nArvhee Latayan\nCarlo Latayan\nJohn Karl Comendador\nJonnelle Molina\nJarrel Catapang\nYves Mcguire\nJohn Rei Subia\nDustin Manalang\nMark Anthony Subia\nJohn Lester Quequing\nArbench Subia\nZid Andrei Vela\nMJ Molina",
+    "court_roses": "Kwin Lyka Esclamado\nSheena Rayne Espiritu\nDaniella Jaile Lacap\nElyssa Fhay Zoilo\nHannah Dela Cueva\nJhorlyn Cornejo\nSarah Garcia\nEricka Quequing\nJayanne Manalang\nFlorentine Principe\nAmiel Subia\nAubprex Subia\nAriel Subia\nRuben Quequing\nRaniedel Arrogancia\nArvhee Latayan\nCarlo Latayan\nJonnelle Molina",
 }
 
 SCHEMA = """
@@ -87,6 +90,7 @@ def read_event(published=True):
     key = "published_json" if published else "draft_json"
     value = row[key]
     content = json.loads(value) if isinstance(value, str) else value
+    content = {**DEFAULT_CONTENT, **content}
     return content, bool(row["is_published"])
 
 def fetch_photos(visible_only=True):

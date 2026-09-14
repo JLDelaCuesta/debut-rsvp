@@ -97,7 +97,7 @@ def dashboard():
 def event_editor():
     content, _ = event_content(False)
     if request.method == "POST":
-        fields = ["celebrant", "title", "intro", "date", "time", "venue", "address", "story", "dress_code", "gifts", "contact", "rsvp_deadline"]
+        fields = ["celebrant", "title", "intro", "date", "time", "venue", "address", "story", "dress_code", "gifts", "contact", "rsvp_deadline", "court_gifts", "court_bluebills", "court_roses"]
         content.update({field: request.form.get(field, "").strip() for field in fields})
         content.update({field: request.form.get(field) == "on" for field in ["show_party_size", "show_contact", "show_notes"]})
         save_event(content, request.form.get("action") == "publish")

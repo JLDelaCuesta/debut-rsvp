@@ -88,3 +88,11 @@ lightbox?.addEventListener('click', (event) => {
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && lightbox?.classList.contains('is-open')) closeLightbox();
 });
+
+document.querySelectorAll('.court-scroll-toggle').forEach((toggle) => {
+  toggle.addEventListener('click', () => {
+    const scroll = toggle.closest('.court-scroll');
+    const isOpen = scroll.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+});
