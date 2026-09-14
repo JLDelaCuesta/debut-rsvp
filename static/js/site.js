@@ -92,7 +92,22 @@ document.addEventListener('keydown', (event) => {
 document.querySelectorAll('.court-scroll-toggle').forEach((toggle) => {
   toggle.addEventListener('click', () => {
     const scroll = toggle.closest('.court-scroll');
-    const isOpen = scroll.classList.toggle('is-open');
+    const list = scroll.querySelector('.court-list');
+    const isOpen = !scroll.classList.contains('is-open');
+    if (isOpen) {
+      list.style.maxHeight = '0px';
+      scroll.classList.add('is-open');
+      window.requestAnimationFrame(() => {
+        list.style.maxHeight = `${list.scrollHeight}px`;
+      });
+    } else {
+      list.style.maxHeight = `${list.scrollHeight}px`;
+      list.offsetHeight;
+      scroll.classList.remove('is-open');
+      window.requestAnimationFrame(() => {
+        list.style.maxHeight = '0px';
+      });
+    }
     toggle.setAttribute('aria-expanded', String(isOpen));
   });
 });
