@@ -97,7 +97,7 @@ document.querySelectorAll('.court-scroll-toggle').forEach((toggle) => {
     if (isOpen) {
       scroll.classList.add('is-open');
       list.style.maxHeight = 'none';
-      const contentHeight = list.scrollHeight;
+      const contentHeight = list.scrollHeight + 8;
       list.style.maxHeight = '0px';
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {
@@ -115,6 +115,13 @@ document.querySelectorAll('.court-scroll-toggle').forEach((toggle) => {
     toggle.setAttribute('aria-expanded', String(isOpen));
   });
 });
+
+const resizeOpenCourtLists = () => {
+  document.querySelectorAll('.court-scroll.is-open .court-list').forEach((list) => {
+    list.style.maxHeight = `${list.scrollHeight + 8}px`;
+  });
+};
+window.addEventListener('resize', resizeOpenCourtLists);
 
 const autoGrowTextareas = document.querySelectorAll('textarea.auto-grow');
 const resizeTextarea = (textarea) => {
