@@ -115,3 +115,13 @@ document.querySelectorAll('.court-scroll-toggle').forEach((toggle) => {
     toggle.setAttribute('aria-expanded', String(isOpen));
   });
 });
+
+const autoGrowTextareas = document.querySelectorAll('textarea.auto-grow');
+const resizeTextarea = (textarea) => {
+  textarea.style.height = 'auto';
+  textarea.style.height = `${textarea.scrollHeight}px`;
+};
+autoGrowTextareas.forEach((textarea) => {
+  resizeTextarea(textarea);
+  textarea.addEventListener('input', () => resizeTextarea(textarea));
+});

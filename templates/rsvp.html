@@ -64,7 +64,7 @@
         <fieldset><legend>Will you be there?</legend><label class="choice"><input type="radio" name="attending" value="yes" required><span>Joyfully, yes</span></label><label class="choice"><input type="radio" name="attending" value="no"><span>Sending love from afar</span></label></fieldset>
         {% if content.show_party_size %}<label>Number in your party<input name="party_size" type="number" min="1" max="12" value="1"></label>{% endif %}
         {% if content.show_contact %}<label>Email or phone<input name="contact" autocomplete="email" placeholder="How may we reach you?"></label>{% endif %}
-        {% if content.show_notes %}<label>Dietary notes or wishes<textarea name="notes" rows="3" placeholder="Anything we should know?"></textarea></label>{% endif %}
+        {% if content.show_notes %}<label>Dietary notes or wishes<textarea class="auto-grow" name="notes" rows="3" placeholder="Anything we should know?"></textarea></label>{% endif %}
         <button class="button" type="submit">Send my RSVP <span>→</span></button>
       </form>
       {% else %}<p class="unpublished">The guest book is being prepared. Please check back soon.</p>{% endif %}
