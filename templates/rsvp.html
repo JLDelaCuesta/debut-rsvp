@@ -41,11 +41,6 @@
       {% if photos %}<div class="gallery gallery-count-{{ photos|length if photos|length < 5 else 'many' }} reveal">{% for photo in photos %}<figure class="gallery-item"><button class="gallery-trigger" type="button" aria-label="Open {{ photo.caption or content.celebrant }} photo" data-lightbox-src="{{ url_for('public.media', filename=photo.filename) }}" data-lightbox-alt="{{ photo.caption or content.celebrant }}"><img src="{{ url_for('public.media', filename=photo.filename) }}" alt="{{ photo.caption or content.celebrant }}"><span class="zoom-hint" aria-hidden="true">＋</span></button><figcaption>{{ photo.caption }}</figcaption></figure>{% endfor %}</div>{% endif %}
     </section>
 
-    <section class="section notes-section">
-      <div class="note"><span class="note-number">01</span><div class="note-content"><p class="eyebrow">A little note</p><h3>Gifts & wishes</h3><p>{{ content.gifts }}</p></div></div>
-      <div class="note"><span class="note-number">02</span><div class="note-content"><p class="eyebrow">Stay in touch</p><h3>Questions?</h3><p>{{ content.contact }}</p></div></div>
-    </section>
-
     <section class="court-section" id="court">
       <div class="court-heading reveal"><p class="eyebrow">The royal procession</p><h2>Debutants'<br><em>court</em></h2><p>Three scrolls, fifty-four names, and a little magic for every honored guest.</p></div>
       <div class="court-scrolls">
@@ -53,6 +48,11 @@
         <article class="court-scroll court-scroll-bluebills reveal"><button class="court-scroll-toggle" type="button" aria-expanded="false"><span class="court-seal">02</span><span><small>18 bluebills & shots</small><strong>The Toastmakers</strong></span><span class="court-open">＋</span></button><div class="court-list"><ol>{% for name in content.court_bluebills.splitlines() if name.strip() %}<li>{{ name }}</li>{% endfor %}</ol></div></article>
         <article class="court-scroll court-scroll-roses reveal"><button class="court-scroll-toggle" type="button" aria-expanded="false"><span class="court-seal">03</span><span><small>18 roses</small><strong>The Rosebearers</strong></span><span class="court-open">＋</span></button><div class="court-list"><ol>{% for name in content.court_roses.splitlines() if name.strip() %}<li>{{ name }}</li>{% endfor %}</ol></div></article>
       </div>
+    </section>
+
+    <section class="section notes-section">
+      <div class="note"><span class="note-number">01</span><div class="note-content"><p class="eyebrow">A little note</p><h3>Gifts & wishes</h3><p>{{ content.gifts }}</p></div></div>
+      <div class="note"><span class="note-number">02</span><div class="note-content"><p class="eyebrow">Stay in touch</p><h3>Questions?</h3><p>{{ content.contact }}</p></div></div>
     </section>
 
     <section class="section rsvp-section" id="rsvp">
