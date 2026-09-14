@@ -95,12 +95,14 @@ document.querySelectorAll('.court-scroll-toggle').forEach((toggle) => {
     const list = scroll.querySelector('.court-list');
     const isOpen = !scroll.classList.contains('is-open');
     if (isOpen) {
+      scroll.classList.add('is-open');
       list.style.maxHeight = 'none';
       const contentHeight = list.scrollHeight;
       list.style.maxHeight = '0px';
-      scroll.classList.add('is-open');
       window.requestAnimationFrame(() => {
-        list.style.maxHeight = `${contentHeight}px`;
+        window.requestAnimationFrame(() => {
+          list.style.maxHeight = `${contentHeight}px`;
+        });
       });
     } else {
       list.style.maxHeight = `${list.scrollHeight}px`;
