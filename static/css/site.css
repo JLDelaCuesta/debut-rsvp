@@ -1,13 +1,13 @@
 :root {
-  --ink: #2b1837;
-  --plum: #5b275f;
-  --berry: #9e3d68;
-  --rose: #e8a0ae;
-  --blush: #fff4f2;
-  --cream: #fffaf2;
-  --gold: #c99455;
-  --sage: #607c6a;
-  --line: rgba(91, 39, 95, .18);
+  --ink: #241936;
+  --plum: #4d225b;
+  --berry: #713875;
+  --rose: #c69bd5;
+  --blush: #f4eff8;
+  --cream: #fcf9ff;
+  --gold: #b9799d;
+  --sage: #526b67;
+  --line: rgba(77, 34, 91, .18);
   --display: 'Cormorant Garamond', Georgia, serif;
   --body: 'DM Sans', sans-serif;
 }
@@ -92,3 +92,52 @@ footer { background: #341b3d; color: #d9b4bd; display: flex; justify-content: sp
 .admin-shell .back-link, .admin-shell .text-link { color: #852f5a; }
 .flash { opacity: 1; max-height: 5rem; overflow: hidden; transition: opacity .45s ease, transform .45s ease, max-height .45s ease, margin .45s ease, padding .45s ease; }
 .flash.is-dismissing { opacity: 0; transform: translateY(-5px); max-height: 0; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0; }
+
+/* Lavender palette: light lilac surfaces, orchid accents, and indigo contrast. */
+body { background: var(--blush); }
+.hero { background: radial-gradient(circle at 50% 28%, rgba(198,155,213,.72), transparent 28%), linear-gradient(145deg, #3d2059 0%, #673878 48%, #9f668d 100%); }
+.hero::before { background-image: radial-gradient(circle, #ecd6ee 0 1px, transparent 1.5px); }
+.hero::after { background: linear-gradient(transparent 72%, rgba(35,19,58,.58)); }
+.hero .eyebrow { color: #f1d9ec; }
+.envelope-mark, .envelope-mark strong { color: #ead0e9; border-color: #ead0e9; }
+.hero-title { color: #f0dbea; }
+.scroll-cue { color: #f5e6f2; }
+.vine { color: rgba(228,190,224,.72); }
+.hero-flora { color: rgba(226,185,218,.7); }
+.firefly { background: #efd6f0; box-shadow: 0 0 8px 3px rgba(220,176,230,.72); }
+.invitation::before { background-image: linear-gradient(115deg, rgba(252,249,255,.91), rgba(241,233,247,.78)), var(--invitation-image), radial-gradient(circle at 20% 20%, #d9bfe4, transparent 36%), radial-gradient(circle at 80% 78%, #bda5d2, transparent 40%); }
+.invitation::after { background: radial-gradient(circle at 12% 28%, rgba(185,121,157,.2) 0 2px, transparent 3px), radial-gradient(circle at 88% 70%, rgba(185,121,157,.17) 0 2px, transparent 3px); }
+h1, h2, h3 { color: var(--plum); }
+h1 em, h2 em { color: #7a3e78; }
+.section-intro > p:last-child, .story-copy > p:not(.eyebrow), .note p:not(.eyebrow), .rsvp-heading > p:last-child { color: #594c69; }
+.detail-card:hover { background: #f5edfa; box-shadow: 0 16px 28px rgba(65,34,91,.1); }
+.detail-card.featured, .detail-card.featured:hover { background: #eadcf1; }
+.detail-card small { color: #713875; }
+.detail-card strong { color: #4d225b; }
+.detail-card span:last-child { color: #665877; }
+.story-section { background: #dfd2e7; }
+.gallery-item { background: #a887b7; }
+.gallery-item::after { background: linear-gradient(120deg, transparent 35%, rgba(255,245,255,.3) 50%, transparent 65%); }
+.notes-section { background: #fcf9ff; }
+.note-number, .ornament { color: #a3658c; }
+.rsvp-section { background: #30204f; }
+.rsvp-heading > p:last-child { color: #e4cfe8; }
+label, legend { color: #f1e2f2; }
+input, textarea { border-color: rgba(232,210,240,.4); background: rgba(255,255,255,.09); }
+input:focus, textarea:focus { border-color: #d49ac2; }
+.choice input:checked + span { border-color: #c895b5; background: rgba(200,149,181,.16); color: #f2d9eb; }
+.button { background: #b9799d; color: #241936; }
+footer { background: #241936; color: #d9c0df; }
+footer a { color: #e6b8d1; }
+.lightbox { background: rgba(25,14,42,.92); }
+.lightbox-content figcaption { color: #f0dbea; }
+.lightbox-close:hover, .lightbox-close:focus-visible { background: #b9799d; color: #241936; }
+.admin-shell { background: #f1eaf6; }
+.admin-shell .eyebrow { color: #70417c; }
+.admin-shell .flash.success { background: #dcebe5; color: #285b4b; }
+.admin-shell .flash.error { background: #f1dce9; color: #812e55; }
+.admin-shell .back-link, .admin-shell .text-link { color: #67336d; }
+.admin-overview, .admin-card, .editor-section { background: rgba(252,249,255,.78); border-color: rgba(77,34,91,.18); }
+.admin-card h2, .editor-section h2 { color: #4d225b; }
+.status-dot.live { background: #526b67; }
+.quiet-button { border-color: rgba(77,34,91,.24); color: #4d225b; }
