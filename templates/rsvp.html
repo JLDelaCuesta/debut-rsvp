@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ content.celebrant }} | You are invited</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+</head>
+<body>
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-stars"></div>
+      <div class="fireflies" aria-hidden="true"></div>
+      <span class="vine vine-left">✦<br>❧<br>✦</span>
+      <span class="vine vine-right">❧<br>✦<br>❧</span>
+      <div class="hero-content hero-parallax">
+        <p class="eyebrow">A little magic is on its way</p>
+        <p class="script hero-kicker">You are invited</p>
+        <div class="envelope-mark"><span>✦</span><strong>{{ content.celebrant[0] }}</strong><span>✦</span></div>
+        <p class="hero-name">{{ content.celebrant }}</p>
+        <p class="hero-title">{{ content.title }}</p>
+        <a class="scroll-cue" href="#invitation"><span>Open the invitation</span><b>↓</b></a>
+      </div>
+      <div class="hero-flora flora-bottom hero-parallax">✿　❀　✿　❁　✿　❀　✿</div>
+    </section>
+
+    <section class="section invitation" id="invitation"{% if photos %} style="--invitation-image: url('{{ url_for('public.media', filename=photos[0].filename) }}')"{% endif %}>
+      <div class="section-intro reveal"><p class="eyebrow">A new chapter begins</p><h1>{{ content.celebrant }}<br><em>turns eighteen</em></h1><p>{{ content.intro }}</p></div>
+      <div class="detail-grid reveal">
+        <div class="detail-card"><span class="detail-icon">☾</span><small>When</small><strong>{{ content.date }}</strong><span>{{ content.time }}</span></div>
+        <div class="detail-card featured"><span class="detail-icon">⌖</span><small>Where</small><strong>{{ content.venue }}</strong><span>{{ content.address }}</span></div>
+        <div class="detail-card"><span class="detail-icon">✧</span><small>Dress code</small><strong>{{ content.dress_code }}</strong><span>Come as your favorite fairytale.</span></div>
+      </div>
+    </section>
+
+    <section class="section story-section">
+      <div class="story-copy reveal"><p class="eyebrow">Once upon a time</p><h2>Come celebrate<br><em>the beginning</em></h2><p>{{ content.story }}</p><div class="ornament">—　✦　—</div></div>
+      {% if photos %}<div class="gallery gallery-count-{{ photos|length if photos|length < 5 else 'many' }} reveal">{% for photo in photos %}<figure class="gallery-item"><button class="gallery-trigger" type="button" aria-label="Open {{ photo.caption or content.celebrant }} photo" data-lightbox-src="{{ url_for('public.media', filename=photo.filename) }}" data-lightbox-alt="{{ photo.caption or content.celebrant }}"><img src="{{ url_for('public.media', filename=photo.filename) }}" alt="{{ photo.caption or content.celebrant }}"><span class="zoom-hint" aria-hidden="true">＋</span></button><figcaption>{{ photo.caption }}</figcaption></figure>{% endfor %}</div>{% endif %}
+    </section>
+
+    <section class="section notes-section">
+      <div class="note"><span class="note-number">01</span><div><p class="eyebrow">A little note</p><h3>Gifts & wishes</h3><p>{{ content.gifts }}</p></div></div>
+      <div class="note"><span class="note-number">02</span><div><p class="eyebrow">Stay in touch</p><h3>Questions?</h3><p>{{ content.contact }}</p></div></div>
+    </section>
+
+    <section class="section rsvp-section" id="rsvp">
+      <div class="rsvp-heading"><p class="eyebrow">The guest book awaits</p><h2>Will you join us?</h2><p>{{ content.rsvp_deadline }}</p></div>
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-list">{% for category, message in messages %}<p class="flash {{ category }}">{{ message }}</p>{% endfor %}</div>{% endif %}{% endwith %}
+      {% if is_published %}
+      <form class="rsvp-form" method="post" action="{{ url_for('public.rsvp') }}">
+        <label>Guest name<input name="name" required autocomplete="name" placeholder="Your name"></label>
+        <fieldset><legend>Will you be there?</legend><label class="choice"><input type="radio" name="attending" value="yes" required><span>Joyfully, yes</span></label><label class="choice"><input type="radio" name="attending" value="no"><span>Sending love from afar</span></label></fieldset>
+        {% if content.show_party_size %}<label>Number in your party<input name="party_size" type="number" min="1" max="12" value="1"></label>{% endif %}
+        {% if content.show_contact %}<label>Email or phone<input name="contact" autocomplete="email" placeholder="How may we reach you?"></label>{% endif %}
+        {% if content.show_notes %}<label>Dietary notes or wishes<textarea name="notes" rows="3" placeholder="Anything we should know?"></textarea></label>{% endif %}
+        <button class="button" type="submit">Send my RSVP <span>→</span></button>
+      </form>
+      {% else %}<p class="unpublished">The guest book is being prepared. Please check back soon.</p>{% endif %}
+    </section>
+  </main>
+  <div class="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Expanded photo viewer">
+    <button class="lightbox-close" type="button" aria-label="Close photo viewer">×</button>
+    <figure class="lightbox-content"><img src="" alt=""><figcaption></figcaption></figure>
+  </div>
+  <footer><a href="#top">{{ content.celebrant }}</a><span>With love, always</span><a href="{{ url_for('admin.login') }}">Admin</a></footer>
+  <script src="{{ url_for('static', filename='js/site.js') }}"></script>
+</body>
+</html>
