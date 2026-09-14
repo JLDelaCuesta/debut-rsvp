@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 
 from flask import current_app, g
 import json
+import ast
 from datetime import timezone
 
 try:
@@ -32,6 +33,19 @@ DEFAULT_CONTENT = {
 }
 
 COURT_FIELDS = ("court_gifts", "court_bluebills", "court_roses")
+
+
+def court_names(value):
+    if isinstance(value, list):
+        return [str(name).strip() for name in value if str(name).strip()]
+    text = str(value or "").replace("\\r\\n", "\n").replace("\\n", "\n")
+    try:
+        parsed = ast.literal_eval(text) if text.startswith("[") else None
+    except (ValueError, SyntaxError):
+        parsed = None
+    if isinstance(parsed, list):
+        return [str(name).strip() for name in parsed if str(name).strip()]
+    return [name.strip() for name in text.replace("\r\n", "\n").split("\n") if name.strip()]
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS event (id INTEGER PRIMARY KEY CHECK (id = 1), draft_json TEXT NOT NULL, published_json TEXT NOT NULL, is_published INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL);

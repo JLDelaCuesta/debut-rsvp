@@ -176,9 +176,10 @@ button:not(.gallery-trigger), .button, .quiet-button, .delete-button, .lightbox-
 .court-seal { display: grid; place-items: center; width: 2.45rem; height: 2.45rem; border: 1px solid #b9799d; border-radius: 50%; color: #713875; font: 600 .72rem var(--body); }
 .court-open { justify-self: end; color: #a3658c; font-size: 1.5rem; transition: transform .3s ease; }
 .court-scroll.is-open .court-open { transform: rotate(45deg); }
-.court-list { display: block; width: 100%; min-width: 0; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; margin: 0; padding: 0 1rem 0 3rem; columns: 1; list-style: decimal-leading-zero; color: #4d225b; transition: max-height .55s ease, opacity .55s ease, visibility 0s linear .55s; }
+.court-list { display: block; width: 100%; min-width: 0; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; margin: 0; padding: 0 1rem 0 3rem; columns: 1; list-style: none; counter-reset: court-item; color: #4d225b; transition: max-height .55s ease, opacity .55s ease, visibility 0s linear .55s; }
 .court-scroll.is-open .court-list { opacity: 1; visibility: visible; padding-bottom: 1rem; transition: max-height .55s ease, opacity .55s ease, visibility 0s linear 0s; }
-.court-list li { padding: .16rem 0; font-size: .78rem; overflow-wrap: anywhere; }
+.court-list li { position: relative; padding: .16rem 0 .16rem 1.55rem; font-size: .78rem; overflow-wrap: anywhere; }
+.court-list li::before { position: absolute; left: 0; color: #a3658c; counter-increment: court-item; content: counter(court-item, decimal-leading-zero) '.'; }
 .court-scroll-gifts { border-top: 7px solid #b9799d; }
 .court-scroll-bluebills { border-top: 7px solid #6e55a0; }
 .court-scroll-roses { border-top: 7px solid #a85880; }

@@ -4,7 +4,7 @@ from functools import wraps
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
 from werkzeug.security import check_password_hash
 
-from .db import delete_photo_file, delete_photo_record, fetch_photos, fetch_rsvps, find_photo, insert_photo, insert_rsvp, next_photo_order, public_photo_url, read_event, save_event, upload_photo_file
+from .db import court_names, delete_photo_file, delete_photo_record, fetch_photos, fetch_rsvps, find_photo, insert_photo, insert_rsvp, next_photo_order, public_photo_url, read_event, save_event, upload_photo_file
 from .images import process_image, save_image_bytes
 
 public = Blueprint("public", __name__)
@@ -19,7 +19,12 @@ def event_content(published=True):
 def home():
     content, is_published = event_content()
     photos = fetch_photos()
-    return render_template("rsvp.html", content=content, photos=photos, is_published=is_published)
+    court_lists = {
+        "gifts": court_names(content["court_gifts"]),
+        "bluebills": court_names(content["court_bluebills"]),
+        "roses": court_names(content["court_roses"]),
+    }
+    return render_template("rsvp.html", content=content, photos=photos, court_lists=court_lists, is_published=is_published)
 
 
 @public.get("/media/<path:filename>")
