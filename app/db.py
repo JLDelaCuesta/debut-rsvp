@@ -73,12 +73,13 @@ def using_supabase_for_app(app):
 
 def fetch_event():
     if using_supabase():
-        result = get_supabase().table("event").select("*").eq("id", 1).maybe_single().execute()
-        if not result.data:
+        result = get_supabase().table("event").select("*").eq("id", 1).limit(1).execute()
+        rows = result.data if result is not None and result.data else []
+        if not rows:
             content = {**DEFAULT_CONTENT}
             get_supabase().table("event").insert({"id": 1, "draft_json": content, "published_json": content, "is_published": False}).execute()
             return {"draft_json": content, "published_json": content, "is_published": False}
-        return result.data
+        return rows[0]
     return get_db().execute("SELECT * FROM event WHERE id = 1").fetchone()
 
 def read_event(published=True):
@@ -139,8 +140,9 @@ def next_photo_order():
 
 def find_photo(photo_id):
     if using_supabase():
-        result = get_supabase().table("photo").select("*").eq("id", photo_id).maybe_single().execute()
-        return result.data
+        result = get_supabase().table("photo").select("*").eq("id", photo_id).limit(1).execute()
+        rows = result.data if result is not None and result.data else []
+        return rows[0] if rows else None
     return get_db().execute("SELECT * FROM photo WHERE id = ?", (photo_id,)).fetchone()
 
 def delete_photo_record(photo_id):
