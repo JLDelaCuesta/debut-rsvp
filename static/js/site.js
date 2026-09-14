@@ -1,3 +1,11 @@
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if (window.location.hash === '#invitation') {
+  history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+  window.scrollTo(0, 0);
+} else if (!window.location.hash) {
+  window.scrollTo(0, 0);
+}
+
 const revealItems = document.querySelectorAll('.reveal');
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
