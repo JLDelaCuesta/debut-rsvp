@@ -1,5 +1,6 @@
 import os
 from functools import wraps
+from urllib.parse import urlparse
 
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
 from werkzeug.security import check_password_hash
@@ -13,6 +14,11 @@ admin = Blueprint("admin", __name__)
 
 def event_content(published=True):
     return read_event(published)
+
+
+def safe_map_url(value):
+    parsed = urlparse((value or "").strip())
+    return value.strip() if parsed.scheme in {"http", "https"} and parsed.netloc else ""
 
 
 @public.get("/")
@@ -104,6 +110,7 @@ def event_editor():
     if request.method == "POST":
         fields = ["celebrant", "title", "intro", "date", "time", "venue", "address", "story", "dress_code", "gifts", "contact", "rsvp_deadline", "court_gifts", "court_bluebills", "court_roses"]
         content.update({field: request.form.get(field, "").strip() for field in fields})
+        content["map_url"] = safe_map_url(request.form.get("map_url"))
         content.update({field: request.form.get(field) == "on" for field in ["show_party_size", "show_contact", "show_notes"]})
         save_event(content, request.form.get("action") == "publish")
         message = "The invitation is now live." if request.form.get("action") == "publish" else "The invitation draft was saved."

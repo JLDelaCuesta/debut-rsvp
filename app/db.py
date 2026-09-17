@@ -19,6 +19,7 @@ DEFAULT_CONTENT = {
     "time": "5:00 PM onwards",
     "venue": "The Starlit Garden",
     "address": "Garden Hall, Moonflower Avenue",
+    "map_url": "",
     "story": "Eighteen chapters have bloomed, and a beautiful new story begins. Come dressed in your favorite fairytale and make this evening unforgettable.",
     "dress_code": "Enchanted garden formal",
     "gifts": "Your presence is the loveliest gift. A handwritten wish is always welcome.",
