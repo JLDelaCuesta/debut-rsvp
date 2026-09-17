@@ -32,7 +32,7 @@
       <div class="detail-grid reveal">
         <div class="detail-card"><span class="detail-icon">☾</span><small>When</small><strong>{{ content.date }}</strong><span>{{ content.time }}</span></div>
         <div class="detail-card featured"><span class="detail-icon">⌖</span><small>Where</small>{% if content.map_url %}<a class="detail-location" href="{{ content.map_url }}" target="_blank" rel="noopener noreferrer" aria-label="Open {{ content.venue }} in Google Maps"><strong>{{ content.venue }}</strong><span>{{ content.address }}</span><b>Open map ↗</b></a>{% else %}<strong>{{ content.venue }}</strong><span>{{ content.address }}</span>{% endif %}</div>
-        <div class="detail-card"><span class="detail-icon">✧</span><small>Dress code</small><strong>{{ content.dress_code }}</strong><span>Come as your favorite fairytale.</span></div>
+        <div class="detail-card"><span class="detail-icon">✧</span><small>Dress code</small><strong>{{ content.dress_code }}</strong><span>{{ content.dress_code_note }}</span></div>
       </div>
     </section>
 
